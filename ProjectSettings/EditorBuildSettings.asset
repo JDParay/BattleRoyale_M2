@@ -15,7 +15,7 @@ EditorBuildSettings:
     path: Assets/Scenes/CoinCollectLobby.unity
     guid: ff87c01bef4692b46bd7c6746c0cf5d9
   - enabled: 1
-    path: Assets/Scenes/StarCollectGame.unity
+    path: Assets/Scenes/CoinCollectGame.unity
     guid: 8f7c1cb34aa023040ad191294c8c2b54
   - enabled: 1
     path: Assets/Scenes/GoalLobby.unity

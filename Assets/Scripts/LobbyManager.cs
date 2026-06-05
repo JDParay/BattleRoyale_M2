@@ -55,7 +55,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         if (gameModeDropdown == null) return;
 
         gameModeDropdown.ClearOptions();
-        gameModeDropdown.AddOptions(new List<string> { "Coin Collect", "Goal" });
+        gameModeDropdown.AddOptions(new List<string> { "Coin Collect", "Battle Royale" });
 
         gameModeDropdown.onValueChanged.AddListener(OnGameModeChanged);
 
@@ -310,7 +310,7 @@ private IEnumerator DelayedLobbySetup(float delay)
             {
                 selectedModeDisplayText.text = currentGameMode == GameMode.CoinCollect 
                     ? "Coin Collect" 
-                    : "Goal";
+                    : "Battle Royale";
             }
         }
 

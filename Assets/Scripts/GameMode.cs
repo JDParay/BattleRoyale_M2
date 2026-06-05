@@ -1,5 +1,5 @@
 public enum GameMode
 {
     CoinCollect,
-    Goal
+    BattleRoyale
 }
