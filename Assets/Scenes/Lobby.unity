@@ -727,6 +727,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d627efbaf6c904d4fbb78cff2782d506, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LobbyManager
+  DebugMode: 1
+  minimumPlayers: 0
   lobbyTitleText: {fileID: 998096053}
   playerCountText: {fileID: 1803218916}
   actionButton: {fileID: 114012977}

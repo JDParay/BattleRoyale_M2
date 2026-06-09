@@ -9,6 +9,12 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
+    [Header("Debug Mode")]
+    [Tooltip("Turn this on for specific debug purposes only. Turn off when not needed.")]
+    public bool DebugMode = false;
+    [Tooltip("Referenced amount of minimum players.")]
+    public int minimumPlayers;
+
     [Header("UI References")]
     public TMP_Text lobbyTitleText;
     public TMP_Text playerCountText;
@@ -29,6 +35,14 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     private void Awake()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
+
+        if (DebugMode)
+        {
+            minimumPlayers = 2;
+        } else
+        {
+            minimumPlayers = 3;
+        }
     }
     private void Start()
     {
@@ -176,7 +190,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             actionButtonText.text = "Start Game";
-            actionButton.interactable = CheckIfEveryoneIsReady() && currentPlayers >= 3;
+            actionButton.interactable = CheckIfEveryoneIsReady() && currentPlayers >= minimumPlayers;
         }
         else
         {
@@ -288,7 +302,16 @@ private IEnumerator DelayedLobbySetup(float delay)
 
         if (int.TryParse(input, out int newMax))
         {
-            byte clampedMax = (byte)Mathf.Clamp(newMax, 3, 12);
+            // IF IN DEBUG MODE, minimum players becomes 2 (so dev only has to run one other clone to test.) IF NOT, minPlayers = 3.
+            // int minimumPlayers;
+            // if (DebugMode)
+            // {
+            //     minimumPlayers = 2;
+            // } else
+            // {
+            //     minimumPlayers = 3;
+            // }
+            byte clampedMax = (byte)Mathf.Clamp(newMax, minimumPlayers, 12);
             
             PhotonNetwork.CurrentRoom.MaxPlayers = clampedMax;
 
