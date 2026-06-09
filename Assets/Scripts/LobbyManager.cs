@@ -38,7 +38,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
         if (DebugMode)
         {
-            minimumPlayers = 2;
+            minimumPlayers = 1;
         } else
         {
             minimumPlayers = 3;
