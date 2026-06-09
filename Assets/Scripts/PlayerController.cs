@@ -1,8 +1,13 @@
 using UnityEngine;
 using Photon.Pun;
 
-public class PlayerController : MonoBehaviourPun
+public class PlayerController : MonoBehaviourPun, IPunObservable
 {
+    [Header("Player Health Settings")]
+    public float health = 100;
+    public float maxPlayerHealth = 100;
+    [SerializeField] private PlayerHealthBarUI healthBar;
+
     public float speed = 5f;
     public float jumpForce = 5f;
     private Rigidbody rb;
@@ -16,6 +21,8 @@ public class PlayerController : MonoBehaviourPun
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        healthBar.SetMaxHealth(maxPlayerHealth);
+        healthBar.SetHealth(health);
     }
 
     void Update()
@@ -32,10 +39,42 @@ public class PlayerController : MonoBehaviourPun
         {
             Jump();
         }
+
+        // TESTING HEALTH BAR
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            SetHealth(-20);
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            SetHealth(20);
+        }
     }
 
     void Jump()
     {
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+    }
+
+    void SetHealth(float healthChange)
+    {
+        health += healthChange;
+        health = Mathf.Clamp(health, 0, maxPlayerHealth);
+
+        healthBar.SetHealth(health);
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(health);
+        }
+        else
+        {
+            health = (float)stream.ReceiveNext();
+            healthBar.SetHealth(health);
+        }
     }
 }

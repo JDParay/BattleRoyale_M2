@@ -8,7 +8,10 @@ public class Nametag : MonoBehaviour
     public TMP_Text nameText;     
     public TMP_Text statusText;     
     public TMP_Text actionText;      
-    public TMP_Text hostText;     
+    public TMP_Text hostText;
+
+    [Header("UI References")]
+    public GameObject healthBar;     
 
     [Header("Positioning")]
     public Vector3 offset = new Vector3(0, 2.2f, 0);
@@ -70,6 +73,11 @@ public void UpdateHostIndicator()
         UpdateReadyStatus();
         UpdateHostIndicator();
         UpdateActionText();
+
+        if (healthBar != null)
+            {
+                healthBar.SetActive(false);
+            }
     }
     else
     {
@@ -82,6 +90,11 @@ public void UpdateHostIndicator()
         {
             hostText.text = ""; 
         }
+
+        if (healthBar != null)
+            {
+                healthBar.SetActive(true);
+            }
     }
 }
 
