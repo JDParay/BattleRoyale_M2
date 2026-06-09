@@ -50,6 +50,11 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             SetHealth(20);
         }
+
+        if (health == 0)
+        {
+            KillPlayer();
+        }
     }
 
     void Jump()
@@ -57,12 +62,17 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
-    void SetHealth(float healthChange)
+    public void SetHealth(float healthChange)
     {
         health += healthChange;
         health = Mathf.Clamp(health, 0, maxPlayerHealth);
 
         healthBar.SetHealth(health);
+    }
+
+    void KillPlayer()
+    {
+        Destroy(this.gameObject);
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
