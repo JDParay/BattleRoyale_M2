@@ -42,19 +42,26 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+
+        if (rb != null)
+        rb.freezeRotation = true;
+
         healthBar.SetMaxHealth(maxPlayerHealth);
         healthBar.SetHealth(health);
     }
 
     void Update()
     {
-        if (!photonView.IsMine) return;
-
-        HandleMovement();
         HandleJump();
         UpdateAnimations();
+        CheckGrounded();
     }
 
+    void FixedUpdate()
+    {
+        if (!photonView.IsMine) return;
+        HandleMovement();
+    }
     // ── Movement ──────────────────────────────────────────────────────────────
 
     private void HandleMovement()
@@ -62,11 +69,22 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         float moveX = Input.GetAxis("Horizontal");
         float moveZ = Input.GetAxis("Vertical");
 
-        bool  sprinting   = Input.GetKey(sprintKey);
+        Vector3 moveDirection = new Vector3(moveX, 0, moveZ).normalized;
+
+        bool sprinting = Input.GetKey(sprintKey);
         float currentSpeed = sprinting ? sprintSpeed : speed;
 
-        Vector3 move = new Vector3(moveX, 0, moveZ) * currentSpeed;
-        rb.MovePosition(transform.position + move * Time.deltaTime);
+        Vector3 targetVelocity = moveDirection * currentSpeed;
+
+        // Smooth velocity change
+        rb.linearVelocity = new Vector3(targetVelocity.x, rb.linearVelocity.y, targetVelocity.z);
+
+        // Rotation
+        if (moveDirection.magnitude > 0.01f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 12f * Time.deltaTime);
+        }
     }
 
     private void HandleJump()
@@ -84,40 +102,33 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     {
         if (animController == null) return;
 
-        // Derive horizontal speed from the rigidbody so it's physics-accurate
-        Vector3 horizontalVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
-        float   currentSpeed       = horizontalVelocity.magnitude;
+        float moveX = Input.GetAxis("Horizontal");
+        float moveZ = Input.GetAxis("Vertical");
+        Vector3 inputDirection = new Vector3(moveX, 0, moveZ);
+
+        float currentInputSpeed = inputDirection.magnitude * (Input.GetKey(sprintKey) ? sprintSpeed : speed);
 
         bool sprinting = Input.GetKey(sprintKey);
-        bool moving    = currentSpeed > walkThreshold;
+        bool moving    = currentInputSpeed > walkThreshold;
         bool jumping   = !isGrounded;
 
-        // Mutually exclusive states — order: jump > run > walk > idle
-        animController.SetBool("isJumping",  jumping);
-        animController.SetBool("isRunning",  !jumping && moving && sprinting);
-        animController.SetBool("isWalking",  !jumping && moving && !sprinting);
-        animController.SetBool("isIdle",     !jumping && !moving);
+        // Use input-based speed instead of physics velocity
+        animController.SetBool("isJumping", jumping);
+        animController.SetBool("isRunning", !jumping && moving && sprinting);
+        animController.SetBool("isWalking", !jumping && moving && !sprinting);
+        animController.SetBool("isIdle",    !jumping && !moving);
 
-        // Optional float for blend-tree speed (ignored if param doesn't exist)
         if (!string.IsNullOrEmpty(speedParamName))
         {
-            animController.SetFloat(speedParamName, currentSpeed);
+            animController.SetFloat(speedParamName, currentInputSpeed);
         }
     }
 
     // ── Ground detection ──────────────────────────────────────────────────────
 
-    void OnCollisionEnter(Collision collision)
+    private void CheckGrounded()
     {
-        // Treat any collision below the player as landing
-        foreach (ContactPoint contact in collision.contacts)
-        {
-            if (contact.normal.y > 0.5f)
-            {
-                isGrounded = true;
-                break;
-            }
-        }
+        isGrounded = Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, 0.3f, ~LayerMask.GetMask("Player"));
     }
 
     // ── Health ────────────────────────────────────────────────────────────────
@@ -133,6 +144,28 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     {
         Destroy(this.gameObject);
     }
+    // ── Damage / Collision ────────────────────────────────────────────────────
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        // Ground detection (keep this)
+        foreach (ContactPoint contact in collision.contacts)
+        {
+            if (contact.normal.y > 0.5f)
+            {
+                isGrounded = true;
+                break;
+            }
+        }
+
+        // === NEW: Damage from obstacles ===
+        if (collision.gameObject.CompareTag("ParkourBlock"))   // ← Change tag if needed
+        {
+            float damage = 20f;     // Change this value as you like
+            SetHealth(-damage);     // Negative = damage
+        }
+    }
+
     // ── PUN sync ──────────────────────────────────────────────────────────────
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

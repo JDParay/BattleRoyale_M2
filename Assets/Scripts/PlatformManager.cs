@@ -12,9 +12,19 @@ public class LobbyPlatform : MonoBehaviour
     [Header("Leave Platform Only")]
     public float leaveHoldTime = 5f;
 
+    [Header("Ready Platform Camera")]
+    public Camera lobbyCamera;           // Assign in inspector
+    public float readyCameraDelay = 0.5f; // Small delay before switching
+
     private float standingTime = 0f;
     private bool playerOnPlatform = false;
     private Nametag localNameTag;
+    private Camera mainCamera;
+
+    private void Start()
+    {
+        mainCamera = Camera.main; // Cache the default main camera
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -56,10 +66,10 @@ public class LobbyPlatform : MonoBehaviour
                     localNameTag.StopLeaveCountdown();
             }
 
-            // Fixed for new Lobby3DManager
             if (type == PlatformType.Ready)
             {
                 Lobby3DManager.Instance.SetReady(false);
+                ResetToMainCamera(); // Reset if they step off before full ready
             }
 
             localNameTag = null;
@@ -78,7 +88,10 @@ public class LobbyPlatform : MonoBehaviour
                 if (standingTime > 0.4f)
                 {
                     Lobby3DManager.Instance.ToggleLocalReady();
-                    playerOnPlatform = false; 
+                    playerOnPlatform = false;
+
+                    // Start camera transition
+                    StartCoroutine(SwitchToLobbyCamera());
                 }
                 break;
 
@@ -90,5 +103,22 @@ public class LobbyPlatform : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    private IEnumerator SwitchToLobbyCamera()
+    {
+        yield return new WaitForSeconds(readyCameraDelay);
+
+        if (mainCamera != null) mainCamera.enabled = false;
+        if (lobbyCamera != null) lobbyCamera.enabled = true;
+
+        // Optional: disable player movement/input while in lobby view
+        // FindObjectOfType<PlayerController>()?.SetInputEnabled(false);
+    }
+
+    public void ResetToMainCamera()
+    {
+        if (mainCamera != null) mainCamera.enabled = true;
+        if (lobbyCamera != null) lobbyCamera.enabled = false;
     }
 }
