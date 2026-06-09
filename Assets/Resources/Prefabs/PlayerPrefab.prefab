@@ -660,7 +660,7 @@ RectTransform:
   - {fileID: 8383659849019012410}
   - {fileID: 3494572439664358811}
   - {fileID: 5241842903032179533}
-  m_Father: {fileID: 2083510000086434895}
+  m_Father: {fileID: 3252501511520868744}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -747,7 +747,7 @@ MonoBehaviour:
   actionText: {fileID: 1965253223427533114}
   hostText: {fileID: 17776037313192256}
   healthBar: {fileID: 8204878930475519588}
-  offset: {x: 0, y: 1.8, z: 0}
+  offset: {x: 0, y: 2.5, z: 0}
 --- !u!1 &8204878930475519588
 GameObject:
   m_ObjectHideFlags: 0
@@ -853,9 +853,12 @@ GameObject:
   - component: {fileID: 3252501511520868744}
   - component: {fileID: 437490636292734758}
   - component: {fileID: 475419587921495595}
+  - component: {fileID: 2290531033208242154}
+  - component: {fileID: 2950189802628390011}
+  - component: {fileID: 7311583613341484428}
   m_Layer: 0
   m_Name: PlayerPrefab
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -873,6 +876,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 8114124032804068417}
   - {fileID: 2083510000086434895}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -913,12 +917,85 @@ MonoBehaviour:
   health: 100
   maxPlayerHealth: 100
   healthBar: {fileID: 1219894369683231121}
-  speed: 5
-  sprintSpeed: 9
-  jumpForce: 5
+  speed: 3
+  sprintSpeed: 6
+  jumpForce: 7
   sprintKey: 304
   walkThreshold: 0.1
   speedParamName: MoveSpeed
+--- !u!114 &2290531033208242154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8416291971466200734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: PhotonUnityNetworking::Photon.Pun.PhotonView
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 475419587921495595}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!54 &2950189802628390011
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8416291971466200734}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 80
+  m_CollisionDetection: 0
+--- !u!136 &7311583613341484428
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8416291971466200734}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2.12
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.02, z: 0}
 --- !u!1001 &1972757176268956580
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -971,13 +1048,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Simple_Character
       objectReference: {fileID: 0}
+    - target: {fileID: 4429062432601748929, guid: 6476c4f6cb346b349a628bb7f820fcf1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.23
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5866666021909216657, guid: 6476c4f6cb346b349a628bb7f820fcf1, type: 3}
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6476c4f6cb346b349a628bb7f820fcf1, type: 3}
-      insertIndex: 0
-      addedObject: {fileID: 8114124032804068417}
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6476c4f6cb346b349a628bb7f820fcf1, type: 3}
 --- !u!4 &2083510000086434895 stripped

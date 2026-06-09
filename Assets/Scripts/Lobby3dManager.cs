@@ -18,6 +18,9 @@ public class Lobby3DManager : MonoBehaviourPunCallbacks
 
     private PhotonView pv;
 
+    private Camera mainCam;
+    private Camera lobbyCam;
+
     private void Awake()
     {
         Instance = this;
@@ -27,6 +30,10 @@ public class Lobby3DManager : MonoBehaviourPunCallbacks
             pv = gameObject.AddComponent<PhotonView>();
             Debug.LogWarning("✅ Added missing PhotonView to Lobby3DManager");
         }
+
+        mainCam = Camera.main;
+        // Find lobby camera (you can assign it via inspector too)
+        lobbyCam = GameObject.Find("LobbyCamera")?.GetComponent<Camera>();
 
         PhotonNetwork.AutomaticallySyncScene = true;
     }
@@ -115,6 +122,12 @@ public class Lobby3DManager : MonoBehaviourPunCallbacks
             return;
 
         Invoke(nameof(CheckIfAllReadySafe), 0.3f);
+
+            if (lobbyCam != null)
+        {
+            mainCam.enabled = false;
+            lobbyCam.enabled = true;
+        }
     }
 
     private void CheckIfAllReadySafe()
@@ -155,6 +168,12 @@ public class Lobby3DManager : MonoBehaviourPunCallbacks
         {
             // Silent during joins
         }
+    }
+
+    public void OnLobbyExit()
+    {
+        if (mainCam != null) mainCam.enabled = true;
+        if (lobbyCam != null) lobbyCam.enabled = false;
     }
 
     [PunRPC]
