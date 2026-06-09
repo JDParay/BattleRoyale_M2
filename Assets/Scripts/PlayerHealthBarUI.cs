@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 
-public class PlayerHealthBarUI : MonoBehaviourPun
+public class PlayerHealthBarUI : MonoBehaviourPun 
 {
     public float Health, MaxHealth, Width, Height;
     [SerializeField] private RectTransform healthBar;

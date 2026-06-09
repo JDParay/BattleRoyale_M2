@@ -123,6 +123,7 @@ MonoBehaviour:
   statusText: {fileID: 3769999957471125716}
   actionText: {fileID: 903727761732315277}
   hostText: {fileID: 1562432960021750831}
+  healthBar: {fileID: 5752689910236717742}
   offset: {x: 0, y: 1.8, z: 0}
 --- !u!1 &1633482018675697300
 GameObject:
@@ -564,6 +565,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 2833624552168099240}
+  - {fileID: 3100706421925667693}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -595,6 +597,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d0aab5e77e7d5743803ef7e41f1a66f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  health: 100
   maxPlayerHealth: 100
   healthBar: {fileID: 6058638817425006401}
   speed: 5
