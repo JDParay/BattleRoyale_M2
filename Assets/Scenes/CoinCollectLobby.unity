@@ -464,7 +464,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 481464c726050444ebf1c26badc383a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LobbyPlayerSpawner
-  playerPrefab: {fileID: 5035671566706031278, guid: 4416e83271924534897e2b679b8efb94, type: 3}
+  playerPrefab: {fileID: 8416291971466200734, guid: a430ccf0707e2c049bf938b050927b12, type: 3}
   leftSpawn: {fileID: 1280508190}
   middleSpawn: {fileID: 972682064}
   rightSpawn: {fileID: 1637400093}
