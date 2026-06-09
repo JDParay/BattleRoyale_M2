@@ -1,11 +1,15 @@
 using UnityEngine;
 using Photon.Pun;
+using Photon.Realtime;
 
 public class PlayerController : MonoBehaviourPun, IPunObservable
 {
     [Header("Player Health Settings")]
     public float health = 100;
     public float maxPlayerHealth = 100;
+    // public bool playerDisabled = false;
+    // public float playerDisabledTimer = 0;
+    public float maxPlayerDisableTime = 10f;
     [SerializeField] private PlayerHealthBarUI healthBar;
 
     [Header("Movement Settings")]
@@ -136,6 +140,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         healthBar.SetHealth(health);
     }
 
+    void DisablePlayer()
+    {
+        Destroy(this.gameObject);
+    }
     // ── Damage / Collision ────────────────────────────────────────────────────
 
     private void OnCollisionEnter(Collision collision)
