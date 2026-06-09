@@ -1,11 +1,15 @@
 using UnityEngine;
 using Photon.Pun;
+using Photon.Realtime;
 
 public class PlayerController : MonoBehaviourPun, IPunObservable
 {
     [Header("Player Health Settings")]
     public float health = 100;
     public float maxPlayerHealth = 100;
+    // public bool playerDisabled = false;
+    // public float playerDisabledTimer = 0;
+    public float maxPlayerDisableTime = 10f;
     [SerializeField] private PlayerHealthBarUI healthBar;
 
     public float speed = 5f;
@@ -27,7 +31,32 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     void Update()
     {
-        if (!photonView.IsMine) return; 
+        // Debug.Log($"Player disabled: {playerDisabled}. Disabled timer: " + playerDisabledTimer);
+
+        if (!photonView.IsMine) return;
+
+        if (health == 0)
+        {
+            // playerDisabled = true;
+            // KillPlayer();
+        }
+
+        // run timer
+        // if (playerDisabled)
+        // {
+        //     playerDisabledTimer += Time.deltaTime;
+        //     rb.Sleep();
+        //     if (playerDisabledTimer >= maxPlayerDisableTime)
+        //     {
+        //         // resets player
+        //         playerDisabledTimer = 0f;
+        //         SetHealth(maxPlayerHealth);
+        //         playerDisabled = false;
+        //         rb.WakeUp();
+        //     }
+        // }
+
+        // if (playerDisabled) return;
 
         float moveX = Input.GetAxis("Horizontal");
         float moveZ = Input.GetAxis("Vertical");
@@ -50,11 +79,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             SetHealth(20);
         }
-
-        if (health == 0)
-        {
-            KillPlayer();
-        }
     }
 
     void Jump()
@@ -70,7 +94,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         healthBar.SetHealth(health);
     }
 
-    void KillPlayer()
+    void DisablePlayer()
     {
         Destroy(this.gameObject);
     }

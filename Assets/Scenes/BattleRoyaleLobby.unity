@@ -1914,6 +1914,7 @@ GameObject:
   m_Component:
   - component: {fileID: 526209726}
   - component: {fileID: 526209729}
+  - component: {fileID: 526209730}
   - component: {fileID: 526209728}
   - component: {fileID: 526209727}
   m_Layer: 0
@@ -1983,11 +1984,33 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 526209725}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 42369d02e7b84b449a0182cd04633fc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MinigameManager
+  coinSpawner: {fileID: 256106714}
+  scoreboardManager: {fileID: 1705584985}
+  centralNotificationText: {fileID: 1398159344}
+  timerText: {fileID: 947428737}
+  endPanel: {fileID: 1037269754}
+  endPanelTimerText: {fileID: 1129380657}
+  skipButton: {fileID: 318853265}
+  rank1Text: {fileID: 1136818298}
+  rank2Text: {fileID: 589004772}
+  rank3Text: {fileID: 789085391}
+--- !u!114 &526209730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 526209725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5c1c198b0371c4418abc65dfdeb4b3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BattleRoyaleGame
   coinSpawner: {fileID: 256106714}
   scoreboardManager: {fileID: 1705584985}
   centralNotificationText: {fileID: 1398159344}
