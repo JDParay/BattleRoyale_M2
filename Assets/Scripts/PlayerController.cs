@@ -52,6 +52,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     void Update()
     {
+        if (!photonView.IsMine) return;
+
         HandleJump();
         UpdateAnimations();
         CheckGrounded();
@@ -66,6 +68,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     private void HandleMovement()
     {
+        if (!photonView.IsMine) return;
+        
         float moveX = Input.GetAxis("Horizontal");
         float moveZ = Input.GetAxis("Vertical");
 
@@ -159,10 +163,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         }
 
         // === NEW: Damage from obstacles ===
-        if (collision.gameObject.CompareTag("ParkourBlock"))   // ← Change tag if needed
+        if (collision.gameObject.CompareTag("ParkourBlock"))
         {
-            float damage = 20f;     // Change this value as you like
-            SetHealth(-damage);     // Negative = damage
+            float damage = 20f;
+            SetHealth(-damage);
         }
     }
 

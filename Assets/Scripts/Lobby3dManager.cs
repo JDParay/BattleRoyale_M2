@@ -1,6 +1,8 @@
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
+using UnityEngine.UI;
+using System.Collections.Generic;
 using TMPro;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -16,10 +18,24 @@ public class Lobby3DManager : MonoBehaviourPunCallbacks
     public GameObject nameChangePanel;
     public TMP_InputField nameInputField;
 
+    [Header("Color Picker")]
+    public GameObject colorChangePanel;
+    private ChangeColor localPlayerColor; 
+
     private PhotonView pv;
 
     private Camera mainCam;
     private Camera lobbyCam;
+
+        private readonly Dictionary<string, Color> namedColors = new Dictionary<string, Color>()
+    {
+        { "Red",    Color.red },
+        { "Blue",   Color.blue },
+        { "Green",  Color.green },
+        { "Yellow", Color.yellow },
+        { "Orange", new Color(1f, 0.5f, 0f) },
+        { "White",  Color.white },
+    };
 
     private void Awake()
     {
@@ -41,15 +57,46 @@ public class Lobby3DManager : MonoBehaviourPunCallbacks
     private void Start()
     {
         SetReady(false);
+        SetupColorButtons();
     }
 
     // ====================== NAME CHANGE ======================
+
+    private void SetupColorButtons()
+{
+    if (colorChangePanel == null) return;
+
+    foreach (Button btn in colorChangePanel.GetComponentsInChildren<Button>())
+    {
+        string btnName = btn.gameObject.name;
+
+        if (namedColors.TryGetValue(btnName, out Color color))
+        {
+            // Tint the button itself so it looks like a swatch
+            btn.GetComponent<Image>().color = color;
+
+            // Capture for closure
+            Color captured = color;
+            btn.onClick.AddListener(() => localPlayerColor?.ApplyColor(captured));
+        }
+        else
+        {
+            Debug.LogWarning($"Color button '{btnName}' has no matching color defined.");
+        }
+    }
+}
+    public void RegisterLocalPlayer(GameObject player)
+    {
+        localPlayerColor = player.GetComponent<ChangeColor>();
+    }
+    
     public void ShowNameChangeUI()
     {
         if (nameChangePanel == null || nameInputField == null) return;
 
         nameInputField.text = PhotonNetwork.NickName;
         nameChangePanel.SetActive(true);
+        colorChangePanel.SetActive(false);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         nameInputField.ActivateInputField();
@@ -58,6 +105,13 @@ public class Lobby3DManager : MonoBehaviourPunCallbacks
     public void HideNameChangeUI()
     {
         if (nameChangePanel != null) nameChangePanel.SetActive(false);
+    }
+
+    public void OpenColorChangeUI()
+    {
+        if (nameChangePanel != null) nameChangePanel.SetActive(false);
+        colorChangePanel.SetActive(true);
+
     }
 
     public void SetEditingStatus(bool isEditing)
@@ -89,6 +143,7 @@ public class Lobby3DManager : MonoBehaviourPunCallbacks
 
         Debug.Log("Name changed to: " + newName);
     }
+
 
     // ====================== READY ======================
     public void SetReady(bool ready)
@@ -127,6 +182,15 @@ public class Lobby3DManager : MonoBehaviourPunCallbacks
         {
             mainCam.enabled = false;
             lobbyCam.enabled = true;
+        }
+
+            foreach (var pv in FindObjectsOfType<PhotonView>())
+        {
+            if (pv.Owner == targetPlayer)
+            {
+                pv.GetComponent<ChangeColor>()?.ApplyFromPhotonProperties(changedProps);
+                break;
+            }
         }
     }
 

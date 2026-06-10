@@ -44,6 +44,7 @@ MonoBehaviour:
   - RPC_StartMatchCountdown
   - RPC_TransitionToMinigame
   - RPC_StartMinigame
+  - RPC_SyncColor
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

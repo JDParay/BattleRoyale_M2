@@ -17,7 +17,6 @@ public class BattleRoyaleGame : MonoBehaviourPunCallbacks
 
     [Header("UI General")]
     public TMP_Text centralNotificationText; 
-    public TMP_Text timerText;
     
     [Header("End Game UI Panel")]
     public GameObject endPanel;
@@ -48,7 +47,6 @@ public class BattleRoyaleGame : MonoBehaviourPunCallbacks
         // Reset local score
         PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { "Score", 0 } });
 
-        timerText.text = "1:00";
         centralNotificationText.gameObject.SetActive(true);
         centralNotificationText.text = "Waiting...";
 
@@ -108,16 +106,6 @@ public class BattleRoyaleGame : MonoBehaviourPunCallbacks
         {
             StartCoroutine(EndMatchSequence());
         }
-
-        matchTimer -= Time.deltaTime;
-        if (matchTimer <= 0)
-        {
-            matchTimer = 0;
-            StartCoroutine(EndMatchSequence());
-        }
-
-
-        timerText.text = $"0:{Mathf.CeilToInt(matchTimer):00}";
     }
 
     [System.Obsolete]

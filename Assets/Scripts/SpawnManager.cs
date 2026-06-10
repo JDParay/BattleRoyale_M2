@@ -56,6 +56,7 @@ public class SpawnManager : MonoBehaviour
         }
 
         GameObject playerInstance = PhotonNetwork.Instantiate("Prefabs/PlayerPrefab", spawnPos, spawnRot);
+        Lobby3DManager.Instance.RegisterLocalPlayer(playerInstance);
         Debug.Log($"✅ Spawned player instance over network");
 
         if (playerInstance != null)

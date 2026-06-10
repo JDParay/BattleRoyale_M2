@@ -23,13 +23,4 @@ public class SpinBlock : MonoBehaviour
 
         transform.Rotate(currentSpeed * Time.deltaTime);
     }
-
-    private void OnCollisionEnter(Collision other) {
-        if (other.gameObject.CompareTag("Player"))
-        {
-            Debug.Log("Hit player. Player's health reduced.");
-            PlayerController pc = other.gameObject.GetComponent<PlayerController>();
-            pc.SetHealth(-20);
-        }
-    }
 }

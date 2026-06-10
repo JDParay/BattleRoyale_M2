@@ -856,6 +856,7 @@ GameObject:
   - component: {fileID: 2290531033208242154}
   - component: {fileID: 2950189802628390011}
   - component: {fileID: 7311583613341484428}
+  - component: {fileID: 4039350979753814482}
   m_Layer: 0
   m_Name: PlayerPrefab
   m_TagString: Player
@@ -916,6 +917,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   health: 100
   maxPlayerHealth: 100
+  maxPlayerDisableTime: 10
   healthBar: {fileID: 1219894369683231121}
   speed: 3
   sprintSpeed: 6
@@ -996,6 +998,18 @@ CapsuleCollider:
   m_Height: 2.12
   m_Direction: 1
   m_Center: {x: 0, y: 1.02, z: 0}
+--- !u!114 &4039350979753814482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8416291971466200734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24776a62148f460418c1e99eecf61cad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChangeColor
 --- !u!1001 &1972757176268956580
 PrefabInstance:
   m_ObjectHideFlags: 0
